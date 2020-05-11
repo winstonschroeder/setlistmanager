@@ -8,15 +8,6 @@ from flaskr.db import get_db
 
 bp = Blueprint('blog', __name__)
 
-def create_app():
-    app = ...
-    # existing code omitted
-
-    from . import blog
-    app.register_blueprint(blog.bp)
-    app.add_url_rule('/', endpoint='index')
-
-    return app
 
 @bp.route('/')
 def index():

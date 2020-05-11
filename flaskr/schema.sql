@@ -15,3 +15,10 @@ CREATE TABLE post (
   body TEXT NOT NULL,
   FOREIGN KEY (author_id) REFERENCES user (id)
 );
+
+DROP TABLE IF EXISTS setlist;
+
+CREATE TABLE setlist (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT
+)

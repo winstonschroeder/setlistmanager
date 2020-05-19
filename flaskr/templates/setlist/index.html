@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 
 {% block header %}
-<h3>{% block title %}Setlists{% endblock %} <a class="action btn btn-primary btn-sm" href="{{ url_for('setlist.create') }}">
+<h3>{% block title %}Setlists{% endblock %} <a class="action btn btn-primary btn-sm"
+                                               href="{{ url_for('setlist.create') }}">
 
     <svg class="bi bi-plus" width="10px" height="10px" viewBox="0 0 16 16" fill="currentColor"
          xmlns="http://www.w3.org/2000/svg">
@@ -10,9 +11,22 @@
         <path fill-rule="evenodd" d="M7.5 8a.5.5 0 01.5-.5h4a.5.5 0 010 1H8.5V12a.5.5 0 01-1 0V8z" clip-rule="evenodd"/>
     </svg>
 </a></h3>
+<div class="dropdown">
+    <a id="dLabel" data-target="#" data-toggle="dropdown" role="button" aria-haspopup="true"
+       aria-expanded="false">
+        Dropdown trigger
+        <span class="caret"></span>
+    </a>
+
+    <ul class="dropdown-menu" aria-labelledby="dLabel">
+        <li>Test</li>
+        <li>Test 2</li>
+    </ul>
+</div>
 {% endblock %}
 
 {% block content %}
+
 <div class="row">
     <div class="col-md-4">
         <ul class="list-group d-inline-flex">

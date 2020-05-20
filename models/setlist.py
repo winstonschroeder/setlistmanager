@@ -1,10 +1,12 @@
+
 from typing import List
 from models.base_model import BaseModel
 from models.show import Show
 from models.song import Song
-
-
+# TODO: Implement sqlalchemy according to https://flask.palletsprojects.com/en/1.1.x/patterns/sqlalchemy/#declarative
 class Setlist(BaseModel):
+    query = db_session.query_property()
+
     songs: List[Song] = []
     show: Show = None
 

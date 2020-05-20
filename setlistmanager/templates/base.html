@@ -1,0 +1,112 @@
+<!doctype html>
+<head>
+    <title>{% block title %}{% endblock %} - Setlist Manager</title>
+    <!--<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">-->
+    <script type=text/javascript src="{{url_for('static', filename='js/jquery-3.5.1.min.js') }}"></script>
+    <script type=text/javascript src="{{url_for('static', filename='js/bootstrap.bundle.js') }}"></script>
+    <script type=text/javascript src="{{url_for('static', filename='js/bootstrap.js') }}"></script>
+    <script type=text/javascript src="{{url_for('static', filename='js/bootstrap-table.min.js') }}"></script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme_dark.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/controls.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-table.min.css') }}">
+</head>
+<body>
+<div class="container">
+
+
+    <div class="bs-docs-section clearfix">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <div class="bs-component live-less-editor-hovercontainer"
+                     data-relatedvars="navbar-height,navbar-margin-bottom,navbar-border-radius,navbar-collapse-max-height,navbar-default-bg,navbar-default-border,navbar-default-brand-color,navbar-default-brand-hover-color,navbar-default-brand-hover-bg,navbar-default-color,navbar-default-link-color,navbar-default-link-hover-color,navbar-default-link-hover-bg,navbar-default-link-active-color,navbar-default-link-active-bg,navbar-default-link-disabled-color,navbar-default-link-disabled-bg,navbar-default-toggle-border-color,navbar-default-toggle-hover-bg,navbar-default-toggle-icon-bar-bg,navbar-default-link-active-bg,navbar-default-link-active-color">
+
+                    <div class="navbar navbar-default">
+                        <div class="navbar-header">
+                            <a class="navbar-brand" href="#">Setlist Manager</a>
+                        </div>
+                        <div class="navbar-collapse collapse navbar-responsive-collapse">
+                            <ul class="nav navbar-nav">
+                                <li class="active">
+                                    <a href="/">Dashboard</a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                                       aria-haspopup="true" aria-expanded="false">Library<span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#">Shows</a></li>
+                                        <li><a class="dropdown-item" href="#">Setlists</a></li>
+                                        <li><a class="dropdown-item" href="#">Songs</a></li>
+                                        <li><a class="dropdown-item" href="#">Presets</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#">Library</a>
+                                </li>
+                                <li>
+                                    <form class="navbar-form navbar-left" style="display:flex; justify-content: center; align-items: center; vertical-align: middle;">
+                                        <input class="slide-switch" type="checkbox" id="switch"/>
+                                        <label for="switch">Start</label>
+
+                                    </form>
+                                </li>
+                            </ul>
+                            <form class="navbar-form navbar-left">
+                                <input type="text" class="form-control col-lg-8" placeholder="Search"/>
+                            </form>
+                            <ul class="nav navbar-nav navbar-right">
+                                <li>
+                                    <a href="midimonitor">MIDI Monitor</a>
+                                </li>
+                                <li>
+                                    <a href="settings">
+                                        <svg class="bi bi-tools" width="1em" height="1em" viewBox="0 0 16 16"
+                                             fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd"
+                                                  d="M0 1l1-1 3.081 2.2a1 1 0 01.419.815v.07a1 1 0 00.293.708L10.5 9.5l.914-.305a1 1 0 011.023.242l3.356 3.356a1 1 0 010 1.414l-1.586 1.586a1 1 0 01-1.414 0l-3.356-3.356a1 1 0 01-.242-1.023L9.5 10.5 3.793 4.793a1 1 0 00-.707-.293h-.071a1 1 0 01-.814-.419L0 1zm11.354 9.646a.5.5 0 00-.708.708l3 3a.5.5 0 00.708-.708l-3-3z"
+                                                  clip-rule="evenodd"/>
+                                            <path fill-rule="evenodd"
+                                                  d="M15.898 2.223a3.003 3.003 0 01-3.679 3.674L5.878 12.15a3 3 0 11-2.027-2.027l6.252-6.341A3 3 0 0113.778.1l-2.142 2.142L12 4l1.757.364 2.141-2.141zm-13.37 9.019L3.001 11l.471.242.529.026.287.445.445.287.026.529L5 13l-.242.471-.026.529-.445.287-.287.445-.529.026L3 15l-.471-.242L2 14.732l-.287-.445L1.268 14l-.026-.529L1 13l.242-.471.026-.529.445-.287.287-.445.529-.026z"
+                                                  clip-rule="evenodd"/>
+                                        </svg>
+                                    </a>
+                                </li>
+                                <li>
+                                    {% if g.user %}
+                                    <span>{{ g.user['username'] }}</span>
+                                    <a href="{{ url_for('auth.logout') }}">Log Out</a>
+                                    {% else %}
+                                    <a href="{{ url_for('auth.login') }}">Log In</a>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!--                <div class="bs-component live-less-editor-hovercontainer"-->
+                <!--                     data-relatedvars="jumbotron-padding,jumbotron-color,jumbotron-bg,jumbotron-heading-color,jumbotron-font-size">-->
+                <div class="jumbotron">
+                    <div class="row">
+                        <h1>{% block header %}{% endblock %}</h1>
+                        {% for message in get_flashed_messages() %}
+                        <div class="flash">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="row">
+
+                        {% block content %}{% endblock %}
+                    </div>
+                </div>
+                <!--                </div>-->
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

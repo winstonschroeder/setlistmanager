@@ -1,11 +1,14 @@
-
-from typing import List
 from models.base_model import BaseModel
+from sqlalchemy import Column, String
+from setlistmanager.db import Base
+from typing import List
 from models.show import Show
 from models.song import Song
 # TODO: Implement sqlalchemy according to https://flask.palletsprojects.com/en/1.1.x/patterns/sqlalchemy/#declarative
-class Setlist(BaseModel):
-    query = db_session.query_property()
+
+class Setlist(BaseModel, Base):
+    __tablename__ = 'setlists'
+    # query = db_session.query_property()
 
     songs: List[Song] = []
     show: Show = None

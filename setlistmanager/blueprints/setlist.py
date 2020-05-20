@@ -8,12 +8,12 @@ from setlistmanager.db import get_db
 
 bp = Blueprint('setlist', __name__)
 
-@bp.route('/')
+@bp.route('/setlists')
 def index():
     db = get_db()
     setlists = db.execute(
         'SELECT s.id, s.name'
-        ' FROM setlist s'
+        ' FROM setlists s'
         ' ORDER BY name'
     ).fetchall()
     return render_template('setlist/index.html', setlists=setlists)
@@ -23,7 +23,7 @@ def index():
 def get_setlist(id):
     setlist = get_db().execute(
         'SELECT s.id, name'
-        ' FROM setlist s'
+        ' FROM setlists s'
         ' WHERE s.id = ?',
         (id,)
     ).fetchone()
@@ -33,7 +33,7 @@ def get_setlist(id):
 
     return setlist
 
-@bp.route('/create', methods=('GET', 'POST'))
+@bp.route('/setlists/create', methods=('GET', 'POST'))
 def create():
     if request.method == 'POST':
         name = request.form['name']
@@ -47,7 +47,7 @@ def create():
         else:
             db = get_db()
             db.execute(
-                'INSERT INTO setlist (name)'
+                'INSERT INTO setlists (name)'
                 ' VALUES (?)',
                 (name,)
             )
@@ -57,7 +57,7 @@ def create():
     return render_template('setlist/create.html')
 
 
-@bp.route('/<int:id>/update', methods=('GET', 'POST'))
+@bp.route('/setlists/<int:id>/update', methods=('GET', 'POST'))
 def update(id):
     setlist = get_setlist(id)
 
@@ -73,7 +73,7 @@ def update(id):
         else:
             db = get_db()
             db.execute(
-                'UPDATE setlist SET name = ?'
+                'UPDATE setlists SET name = ?'
                 ' WHERE id = ?',
                 (name, id,)
             )
@@ -83,10 +83,10 @@ def update(id):
     return render_template('setlist/update.html', setlist=setlist)
 
 
-@bp.route('/<int:id>/delete', methods=('POST',))
+@bp.route('/setlists/<int:id>/delete', methods=('POST',))
 def delete(id):
     get_setlist(id)
     db = get_db()
-    db.execute('DELETE FROM setlist WHERE id = ?', (id,))
+    db.execute('DELETE FROM setlists WHERE id = ?', (id,))
     db.commit()
     return redirect(url_for('setlist.index'))

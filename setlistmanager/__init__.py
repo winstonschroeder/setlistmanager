@@ -2,6 +2,10 @@ import os
 
 from flask import Flask
 
+from setlistmanager.db import db_session
+
+
+
 
 def create_app(test_config=None):
     # create and configure the app
@@ -24,6 +28,10 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    @app.teardown_appcontext
+    def shutdown_session(exception=None):
+        db_session.remove()
+
     # a simple page that says hello
     @app.route('/hello')
     def hello():
@@ -42,8 +50,16 @@ def create_app(test_config=None):
     # app.register_blueprint(blog.bp)
     # app.add_url_rule('/', endpoint='index')
 
-    from . import setlist
-    app.register_blueprint(setlist.bp)
+    from setlistmanager.blueprints import dashboard
+    app.register_blueprint(dashboard.bp)
     app.add_url_rule('/', endpoint='index')
+
+    from setlistmanager.blueprints import show
+    app.register_blueprint(show.bp)
+    app.add_url_rule('/shows', endpoint='index')
+
+    from setlistmanager.blueprints import setlist
+    app.register_blueprint(setlist.bp)
+    app.add_url_rule('/setlists', endpoint='index')
 
     return app

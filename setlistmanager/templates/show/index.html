@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>Shows</h1>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <table
+                id="table"
+                data-toggle="table"
+                data-detail-view="false"
+                data-detail-view-icon="false"
+                data-detail-view-by-click="true"
+                data-sort-class="table-active"
+                data-sortable="true"
+                data-detail-formatter="detailFormatter"
+                data-url="/shows/data">
+            <thead>
+            <tr>
+                <th data-field="name" data-sortable="true">Show</th>
+            </tr>
+            </thead>
+        </table>
+        <script>
+  function detailFormatter(index, row) {
+    var html = []
+    $.each(row, function (key, value) {
+      if (key!="id" && key!="metadata") {
+      html.push('<div class="form-row"><div class="form-group col-md-6"><label for="input'
+        + key + '">' + key + '</label>  <input type="text" class="form-control" id="input'
+        + key + '" value="' + value + '"></div>')
+      }
+    })
+    $('#details').html(html.join(''))
+    return ''
+  }
+        </script>
+    </div>
+    <div class="col-md-8">
+        <div class="jumbotron">
+            <form id="details">
+
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

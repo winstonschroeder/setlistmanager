@@ -2,7 +2,6 @@ import jsons
 from flask import (
     Blueprint, render_template, jsonify
 )
-from models.show import Show
 
 from models.show import Show
 

@@ -5,8 +5,6 @@ from flask import Flask
 from setlistmanager.db import db_session
 
 
-
-
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
@@ -32,34 +30,18 @@ def create_app(test_config=None):
     def shutdown_session(exception=None):
         db_session.remove()
 
-    # a simple page that says hello
-    @app.route('/hello')
-    def hello():
-        return 'Hello, World!'
-
     from . import db
     db.init_app(app)
 
     from . import auth
     app.register_blueprint(auth.bp)
 
-    from . import setlist_sandbox
-    app.register_blueprint(setlist_sandbox.bp)
-
-    # from . import blog
-    # app.register_blueprint(blog.bp)
-    # app.add_url_rule('/', endpoint='index')
-
-    from setlistmanager.blueprints import dashboard
-    app.register_blueprint(dashboard.bp)
+    from setlistmanager.blueprints import organizer
+    app.register_blueprint(organizer.bp)
     app.add_url_rule('/', endpoint='index')
 
     from setlistmanager.blueprints import show
     app.register_blueprint(show.bp)
     app.add_url_rule('/shows', endpoint='index')
-
-    from setlistmanager.blueprints import setlist
-    app.register_blueprint(setlist.bp)
-    app.add_url_rule('/setlists', endpoint='index')
 
     return app

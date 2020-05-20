@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Organizer
+{% endblock %}
+
+{% block menu %}
+<ul class="navbar-nav">
+    <li class="nav-item active">
+        <a class="nav-link" href="#">Organizer<span class="sr-only">(current)</span></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#">Performance</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#">Rehearsal</a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block header %}
+<h1>Organizer</h1>
+{% endblock %}
+
+{% block content %}
+
+<!-- Nav tabs -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMainMenu"
+            aria-controls="navbarMainMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-md-center" id="navbarMainMenu">
+        <ul class="nav nav-tabs navbar-nav justify-content-md-center" id="mainMenuTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" id="organizer-tab" data-toggle="tab" href="#organizer" role="tab"
+                   aria-controls="organizer" aria-selected="true">Setlists</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="performance-tab" data-toggle="tab" href="#performance" role="tab"
+                   aria-controls="performance" aria-selected="false">Songs</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="show-tab" data-toggle="tab" href="#show" role="tab" aria-controls="show"
+                   aria-selected="false">Sections</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab"
+                   aria-controls="settings" aria-selected="false">Actions</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Tab panes -->
+<div class="tab-content">
+    <div class="tab-pane active" id="organizer" role="tabpanel" aria-labelledby="organizer-tab">
+        <div class="jumbotron">
+            <h1 class="display-4">Setlists</h1>
+            <form>
+                <div class="form-row">
+                    <div class="col-md-2 mb-2">
+                        <label for="setlist_band">Band</label>
+                        <select class="custom-select" id="setlist_band">
+                            <option value="-1">All</option>
+                            {% for band in bands %}
+                            <option value="{{ band['id'] }}">{{ band }}</option>
+                            {% endfor %}
+                            <option selected disabled value="">filter by Band...</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <label for="setlist_instrument">Instrument</label>
+                        <select class="custom-select" id="setlist_instrument">
+                            <option value="-1">All</option>
+                            {% for band in bands %}
+                            <option value="{{ band['id'] }}">{{ band }}</option>
+                            {% endfor %}
+                            <option selected disabled value="">filter by Instrument...</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select a valid state.
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <hr class="my-4">
+            <div class="row">
+                <div class="col-md-3">
+                    <table
+                            id="table"
+                            data-toggle="table"
+                            data-detail-view="false"
+                            data-detail-view-icon="false"
+                            data-detail-view-by-click="true"
+                            data-sort-class="table-active"
+                            data-sortable="true"
+                            data-detail-formatter="detailFormatter"
+                            data-url="/setlists">
+                        <thead>
+                        <tr>
+                            <th data-field="name" data-sortable="true">Name</th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <script>
+  function detailFormatter(index, row) {
+    var html = []
+    $.each(row, function (key, value) {
+      if (key!="id" && key!="metadata") {
+      html.push('<div class="form-row"><div class="form-group col-md-6"><label for="input'
+        + key + '">' + key + '</label>  <input type="text" class="form-control" id="input'
+        + key + '" value="' + value + '"></div>')
+      }
+    })
+    $('#details').html(html.join(''))
+    return ''
+  }
+
+                    </script>
+                </div>
+                <div class="col-md-8">
+                    <div class="jumbotron" id="details">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane" id="performance" role="tabpanel" aria-labelledby="performance-tab">
+        <div class="jumbotron">
+            <h1 class="display-4">Songs</h1>
+            <form>
+                <div class="form-row">
+                    <div class="col-md-2 mb-2">
+                        <label for="song_band">Band</label>
+                        <select class="custom-select" id="song_band">
+                            <option value="-1">All</option>
+                            {% for band in bands %}
+                            <option value="{{ band['id'] }}">{{ band }}</option>
+                            {% endfor %}
+                            <option selected disabled value="">filter by Band...</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <label for="song_instrument">Instrument</label>
+                        <select class="custom-select" id="song_instrument">
+                            <option value="-1">All</option>
+                            {% for band in bands %}
+                            <option value="{{ band['id'] }}">{{ band }}</option>
+                            {% endfor %}
+                            <option selected disabled value="">filter by Instrument...</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select a valid state.
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <hr class="my-4">
+
+            <script>
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+
+
+
+            </script>
+        </div>
+    </div>
+    <div class="tab-pane" id="show" role="tabpanel" aria-labelledby="show-tab">
+        <div class="jumbotron">
+            <h1>Sections</h1>
+            <p>bla bla bla bla</p>
+        </div>
+    </div>
+    <div class="tab-pane" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+        <div class="jumbotron">
+            <h1>Actions</h1>
+            <p>bla bla bla bla</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

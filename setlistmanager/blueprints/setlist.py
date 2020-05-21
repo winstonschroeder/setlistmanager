@@ -1,37 +1,27 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for
+    Blueprint, flash, redirect, render_template, request, url_for
 )
 from werkzeug.exceptions import abort
 
-from setlistmanager.auth import login_required
-from setlistmanager.db import get_db
+from setlistmanager.db import get_db, db_session
+from setlistmanager.models import Setlist
 
 bp = Blueprint('setlist', __name__)
+
 
 @bp.route('/setlists')
 def index():
     db = get_db()
-    setlists = db.execute(
-        'SELECT s.id, s.name'
-        ' FROM setlists s'
-        ' ORDER BY name'
-    ).fetchall()
+    setlists = Setlist.query.all()
     return render_template('setlist/index.html', setlists=setlists)
 
 
-
 def get_setlist(id):
-    setlist = get_db().execute(
-        'SELECT s.id, name'
-        ' FROM setlists s'
-        ' WHERE s.id = ?',
-        (id,)
-    ).fetchone()
-
+    setlist = Setlist.query.filter(Setlist.id == id).first()
     if setlist is None:
         abort(404, "setlist id {0} doesn't exist.".format(id))
-
     return setlist
+
 
 @bp.route('/setlists/create', methods=('GET', 'POST'))
 def create():
@@ -45,13 +35,10 @@ def create():
         if error is not None:
             flash(error)
         else:
-            db = get_db()
-            db.execute(
-                'INSERT INTO setlists (name)'
-                ' VALUES (?)',
-                (name,)
-            )
-            db.commit()
+            s = Setlist()
+            s.name = name
+            db_session.add(s)
+            db_session.commit()
             return redirect(url_for('setlist.index'))
 
     return render_template('setlist/create.html')

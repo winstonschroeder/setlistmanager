@@ -1,61 +1,84 @@
-import sqlite3
+from datetime import datetime
 
 import click
-from flask import current_app, g
+from flask import g
 from flask.cli import with_appcontext
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy import create_engine, MetaData, Column, Integer, String, Table, ForeignKey, TIMESTAMP
+from sqlalchemy.ext.declarative import declarative_base, declared_attr
+from sqlalchemy.orm import scoped_session, sessionmaker, mapper
 
-engine = create_engine('sqlite:////home/ruben/PycharmProjects/setlistmanager/instance/setlistmanager.sqlite', convert_unicode=True)
+engine = create_engine('sqlite:////home/ruben/PycharmProjects/setlistmanager/instance/setlistmanager.sqlite',
+                       convert_unicode=True)
+metadata = MetaData()
 db_session = scoped_session(sessionmaker(autocommit=False,
                                          autoflush=False,
                                          bind=engine))
-Base = declarative_base()
+
+user = Table('user', metadata,
+             Column('id', Integer, primary_key=True),
+             Column('name', String(50), unique=True),
+             Column('password', String(50), unique=True)
+             )
+
+
+class User(object):
+    query = db_session.query_property()
+
+    def __init__(self, name=None, password=None):
+        self.name = name
+        self.password = password
+
+    def __repr__(self):
+        return '<User %r>' % (self.name)
+
+metadata.create_all(bind=engine, tables=[user], checkfirst=True)
+mapper(User, user)
+
+class DeclarativeBaseModel(object):
+    @declared_attr
+    def __tablename__(cls):
+        return cls.__name__.lower()
+
+    __mapper_args__ = {'always_refresh': True}
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50))
+
+
+    @declared_attr
+    def created_by(self):
+        return Column(Integer, ForeignKey('user.id'))
+
+    created_on = Column(TIMESTAMP, default=datetime.now())
+
+    @declared_attr
+    def modified_by(self):
+        return Column(Integer, ForeignKey('user.id'))
+
+    modified_on = Column(TIMESTAMP)
+
+    def __init__(self, name: str = ''):
+        self.name = name
+
+    def __repr__(self):
+        return '%s' % self.name
+
+
+Base = declarative_base(cls=DeclarativeBaseModel)
+Base.metadata = metadata
 Base.query = db_session.query_property()
 
 
-def get_db():
-    if 'db' not in g:
-        g.db = sqlite3.connect(
-            current_app.config['DATABASE'],
-            detect_types=sqlite3.PARSE_DECLTYPES
-        )
-        g.db.row_factory = sqlite3.Row
-
-    return g.db
-
-
+# noinspection PyUnresolvedReferences
 def init_db():
-    # import all modules here that might define models so that
-    # they will be registered properly on the metadata.  Otherwise
-    # you will have to import them first before calling init_db()
-
-    import models.band
-    import models.instrument
-    import models.preset
-    import models.setlist
-    import models.show
-    import models.song
-    import models.songsection
-    import models.user
-    import models.venue
-
+    import setlistmanager.models
     Base.metadata.create_all(bind=engine)
 
 
 def close_db(e=None):
     db = g.pop('db', None)
-
     if db is not None:
         db.close()
-
-
-# def init_db():
-#     db = get_db()
-#     # TODO: Import Models here and implement all mentioned in https://flask.palletsprojects.com/en/1.1.x/patterns/sqlalchemy/#declarative
-#     with current_app.open_resource('schema.sql') as f:
-#         db.executescript(f.read().decode('utf8'))
 
 
 @click.command('init-db')

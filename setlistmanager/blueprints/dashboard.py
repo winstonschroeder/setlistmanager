@@ -1,9 +1,6 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for
+    Blueprint, render_template
 )
-from werkzeug.exceptions import abort
-from setlistmanager.auth import login_required
-from setlistmanager.db import get_db
 
 bp = Blueprint('dashboard', __name__)
 

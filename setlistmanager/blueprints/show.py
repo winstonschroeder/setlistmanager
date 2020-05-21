@@ -3,7 +3,7 @@ from flask import (
     Blueprint, render_template, jsonify
 )
 
-from models.show import Show
+from setlistmanager.models import Show
 
 bp = Blueprint('show', __name__)
 

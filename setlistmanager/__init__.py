@@ -44,4 +44,7 @@ def create_app(test_config=None):
     app.register_blueprint(show.bp)
     app.add_url_rule('/shows', endpoint='index')
 
+    from setlistmanager.blueprints import dashboard
+    app.register_blueprint(dashboard.bp)
+
     return app

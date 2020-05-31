@@ -26,6 +26,72 @@ Title
             <li class="breadcrumb-item active" aria-current="page">Data</li>
         </ol>
     </nav>
+    <div class="row" style="height:600px;">
+        <div class="col-md-2">
+            <p>List</p>
+                        <table class="table table-striped table-light table-hover"
+                               id="stlists"
+                               data-toggle="table"
+                               data-detail-view="false"
+                               data-detail-view-icon="false"
+                               data-detail-view-by-click="true"
+                               data-sort-class="table-active"
+                               data-sortable="true"
+                               data-url="/setlists">
+                            <thead>
+                            <tr>
+                                <th data-field="name" data-sortable="true">Name</th>
+                            </tr>
+                            </thead>
+                        </table>
+            <div
+                    class="list-group"
+                    id="myList"
+                    role="tablist"
+                    data-url="/setlists"
+            >
+                {% for setlist in setlists %}
+                <a
+                        class="list-group-item list-group-item-action"
+                        data-toggle="list"
+                        href="#setlist_{{ setlist['id'] }}"
+                        role="tab">{{ setlist["name"] }}</a>
+                {% endfor %}
+                <!--                <a class="list-group-item list-group-item-action active" data-toggle="list" href="#home"
+                                   role="tab">Home</a>
+                                <a class="list-group-item list-group-item-action" data-toggle="list" href="#profile"
+                                   role="tab">Profile</a>
+                                <a class="list-group-item list-group-item-action" data-toggle="list" href="#messages" role="tab">Messages</a>
+                                <a class="list-group-item list-group-item-action" data-toggle="list" href="#settings" role="tab">Settings</a>-->
+            </div>
+
+            <script>
+  $(function () {
+    $('#myList a:last-child').tab('show')
+  })
+
+
+            </script>
+
+            </ul>
+        </div>
+        <div class="col">
+            <p>Details</p>
+            <div class="tab-content">
+                {% for setlist in setlists %}
+                <!--<div class="tab-pane active" id="home" role="tabpanel">Test 1</div>
+                <div class="tab-pane" id="profile" role="tabpanel">Test 2</div>
+                <div class="tab-pane" id="messages" role="tabpanel">Test 3</div>
+                <div class="tab-pane" id="settings" role="tabpanel">Test 4</div>-->
+                <div class="tab-pane" id="setlist_{{ setlist['id'] }}" role="tabpanel">
+                    {{ setlist['name'] }}
+                </div>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+
     <div
             id="dataCarousel"
             class="carousel slide datacontroller"

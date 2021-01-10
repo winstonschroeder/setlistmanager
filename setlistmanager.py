@@ -16,7 +16,7 @@ class Demo(App):
         Text('Scene 2', pos=(10, 20))
         Text('Main screen of the app', pos=(20, 20))
 
-        App.scene = App.scenes[1]
+        App.scene = App.scenes[0]
 
 
 

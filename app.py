@@ -34,15 +34,14 @@ class Scene:
     bg = Color('gray')
 
     def __init__(self, *args, **kwargs):
+        # Append the new scene and make it the current scene
+        App.scenes.append(self)
+        App.scene = self
         # Set the instance id and increment the class id
         self.id = Scene.id
         Scene.id += 1
         self.nodes = []
         self.bg = Scene.bg
-
-        # Append the new scene and make it the current scene
-        App.scenes.append(self)
-        App.scene = self
 
     def draw(self):
         """Draw all objects in the scene."""
@@ -60,7 +59,6 @@ class App:
     def __init__(self):
         """Initialize pygame and the application."""
         pygame.init()
-
         self.shortcuts = {
             (K_x, KMOD_LMETA): 'print("cmd+X")',
             (K_x, KMOD_LALT): 'print("alt+X")',

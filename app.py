@@ -9,7 +9,7 @@ class Text:
         self.pos = pos
 
         self.fontname = None
-        self.fontsize = 72
+        self.fontsize = 20
         self.fontcolor = Color('black')
         self.set_font()
         self.render()
@@ -71,10 +71,9 @@ class App:
             (K_g, KMOD_LMETA): 'self.toggle_frame()',
         }
         self.flags = RESIZABLE
-        self.rect = Rect(0, 0, 640, 240)
-        App.scenes = []
+        self.rect = Rect(0, 0, 160, 128)
         App.screen = pygame.display.set_mode(self.rect.size, self.flags)
-        # App.t = Text('Pygame App', pos=(20, 20))
+        App.t = Text('Setlistmanager', pos=(0, 0))
 
         App.running = True
 
@@ -86,9 +85,8 @@ class App:
                     App.running = False
                 if event.type == KEYDOWN:
                     self.do_shortcut(event)
-
-            #App.screen.fill(Color('gray'))
-            #App.t.draw()
+            App.screen.fill(Color('gray'))
+            App.t.draw()
             pygame.display.update()
 
         pygame.quit()
@@ -115,6 +113,3 @@ class App:
         self.flags ^= NOFRAME
         pygame.display.set_mode(self.rect.size, self.flags)
 
-
-if __name__ == '__main__':
-    App().run()

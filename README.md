@@ -1,6 +1,6 @@
 # Tutorial for using "SainSmart st7735 1.8" or "KMR-1.8 spi" display
 
-since raspbian 5.4 module fbtft_device is no longer supported instead the use of device tree overrides became mandatory see https://www.gtkdb.de/index_36_3100.html
+since raspbian 5.4 module fbtft_device is no longer supported, instead the use of device tree overrides became mandatory see https://www.gtkdb.de/index_36_3100.html
 
 Basically the generation of a device tree overlay consists of three steps:
 

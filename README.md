@@ -1,12 +1,12 @@
 # Tutorial for using "SainSmart st7735 1.8" or "KMR-1.8 spi" display
 
-since raspbian 5.4 module fbtft_device is no longer supported instead the use of device tree overrides became mandatory see https://www.gtkdb.de/index_36_3100.html
+since raspbian 5.4 module fbtft_device is no longer supported, instead the use of device tree overrides became mandatory see https://www.gtkdb.de/index_36_3100.html
 
 Basically the generation of a device tree overlay consists of three steps:
 
 1. Create a device tree configuration file
 2. Compile this file with device tree compiler and store it to /boot/overlays/ directory
-3. Append the overlay to /boot/config.txt file -> add line dtoverlay=<dts file name>
+3. Append the overlay to /boot/config.txt file -> add line dtoverlay=\<dts file name\>
 
 Make sure that GPIO pins for SPI are assigned correctly or adjust .dts file. DC=>GPIO24 RESET=>GPIO25
 

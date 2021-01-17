@@ -1,10 +1,15 @@
+import thread
+
 import logging
 import pygame
 from app import *
 from pygame.locals import *
 
-logging.basicConfig(filename='setlistmanager.log', level=logging.DEBUG)
+from web import webapp as w
 
+logging.basicConfig(filename='setlistmanager.log', level=logging.DEBUG)
+SCREEN_WIDTH = 160
+SCREEN_HEIGHT = 128
 
 class Button:
     pass
@@ -13,16 +18,37 @@ class Button:
 class Text():
     """Create a text object."""
 
-    def __init__(self, text, pos, **options):
-        super().__init__(**options)
-        self.__dict__.update(Text.options)
+    def __init__(self, surface, text, pos, **options):
         self.text = text
+        self.surface = surface
         self.pos = pos
-
-        self.fontname = None
-        self.fontsize = 20
+        self.bold = True
+        self.italic = False
+        self.underline = False
+        self.background = None # Color('white')
+        self.font = pygame.font.SysFont('Arial', 64)
+        self.fontname = None # 'Free Sans'
+        self.fontsize = 40
         self.fontcolor = Color('black')
         self.set_font()
+
+        # self.words = [word.split(' ') for word in self.text.splitlines()]  # 2D array where each row is a list of words.
+        # self.space = self.font.size(' ')[0]  # The width of a space.
+        # max_width, max_height = self.surface.get_size()
+        # x, y = self.pos
+        # for line in self.words:
+        #     for word in line:
+        #         word_surface = self.font.render(word, 0, self.fontcolor)
+        #         # print(word)
+        #         word_width, word_height = word_surface.get_size()
+        #         if x + word_width >= max_width:
+        #             x = pos[0]  # Reset the x.
+        #             y += word_height  # Start on new row.
+        #         surface.blit(word_surface, (x, y))
+        #         x += word_width + self.space
+        #     x = pos[0]  # Reset the x.
+        #     y += word_height  # Start on new row.
+
         self.render()
 
     def set_font(self):
@@ -41,33 +67,13 @@ class Text():
 
     def draw(self):
         """Draw the text image to the screen."""
-        App.screen.blit(self.img, self.rect)
-
-
-class Scene:
-    """Create a new scene (room, level, view)."""
-    id = 0
-    bg = Color('gray')
-
-    def __init__(self, *args, **kwargs):
-        # Append the new scene and make it the current scene
-        App.scenes.append(self)
-        App.scene = self
-        # Set the instance id and increment the class id
-        self.id = Scene.id
-        Scene.id += 1
-        self.nodes = []
-        self.bg = Scene.bg
-
-    def draw(self):
-        """Draw all objects in the scene."""
-        App.screen.fill(self.bg)
-        for node in self.nodes:
-            node.draw()
-        pygame.display.flip()
-
-    def __str__(self):
-        return 'Scene {}'.format(self.id)
+        # Put the center of surf at the center of the display
+        surf_center = (
+            (SCREEN_WIDTH - self.rect.width)/2,
+            (SCREEN_HEIGHT - self.rect.height)/2
+        )
+        App.screen.blit(self.img, surf_center)
+        # App.screen.blit(self.img, self.rect)
 
 
 class App:
@@ -78,16 +84,26 @@ class App:
         logging.debug('Initializing App')
         pygame.init()
         pygame.mouse.set_cursor((8, 8), (0, 0), (0, 0, 0, 0, 0, 0, 0, 0), (0, 0, 0, 0, 0, 0, 0, 0))
-        self.flags = FULLSCREEN
-        self.rect = Rect(0, 0, 160, 128)
+        self.shortcuts = {
+            (K_x, KMOD_LMETA): 'print("cmd+X")',
+            (K_x, KMOD_LALT): 'print("alt+X")',
+            (K_x, KMOD_LCTRL): 'print("ctrl+X")',
+            (K_x, KMOD_LMETA + KMOD_LSHIFT): 'print("cmd+shift+X")',
+            (K_x, KMOD_LMETA + KMOD_LALT): 'print("cmd+alt+X")',
+            (K_x, KMOD_LMETA + KMOD_LALT + KMOD_LSHIFT): 'print("cmd+alt+shift+X")',
+        }
+        self.color = Color('green')
+        self.flags = RESIZABLE
+        self.rect = Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
         App.screen = pygame.display.set_mode(self.rect.size, self.flags)
-        App.t = Text('Setlistmanager', pos=(0, 0))
-
+        App.t = Text(App.screen, 'Chorus', pos=(0, 0))
         App.running = True
 
     def run(self):
         """Run the main event loop."""
-        logging.debug('entering loop')
+        logging.debug('entering method run')
+        threading.Thread(target=w.app.run).start()
+        logging.debug('after start of flask')
         while App.running:
             logging.debug('.')
             for event in pygame.event.get():
@@ -95,10 +111,10 @@ class App:
                     App.running = False
                 if event.type == KEYDOWN:
                     self.do_shortcut(event)
-            App.screen.fill(Color('gray'))
+            App.screen.fill(self.color)
             App.t.draw()
             pygame.display.update()
-
+        logging.debug('exiting setlistmanager')
         pygame.quit()
 
     def do_shortcut(self, event):

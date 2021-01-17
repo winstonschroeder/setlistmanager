@@ -1,9 +1,9 @@
-import thread
 
 import logging
 import pygame
 from app import *
 from pygame.locals import *
+from werkzeug.serving import run_simple
 
 from web import webapp as w
 
@@ -102,7 +102,10 @@ class App:
     def run(self):
         """Run the main event loop."""
         logging.debug('entering method run')
-        threading.Thread(target=w.app.run).start()
+
+        app = w.create_app()
+        run_simple('127.0.0.1', 5000, app, use_debugger=True, use_reloader=True)
+
         logging.debug('after start of flask')
         while App.running:
             logging.debug('.')

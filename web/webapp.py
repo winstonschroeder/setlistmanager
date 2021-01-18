@@ -17,7 +17,8 @@ class SetlistmanagerWeb(object):
         self.jinja_env = Environment(loader=FileSystemLoader(template_path),
                                      autoescape=True)
         self.url_map = Map([
-            Rule('/', endpoint='index')
+            Rule('/', endpoint='index'),
+            Rule('/wireframe', endpoint='wireframe')
         ])
 
     def render_template(self, template_name, **context):
@@ -50,6 +51,8 @@ class SetlistmanagerWeb(object):
                 return redirect('/%s+' % short_id)
         return self.render_template('index.html', error=error, url=url)
 
+    def on_wireframe(self, request):
+        return self.render_template('wireframe.html')
 
     def __call__(self, environ, start_response):
         return self.wsgi_app(environ, start_response)

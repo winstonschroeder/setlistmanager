@@ -17,7 +17,11 @@ class SetlistmanagerWeb(object):
         self.jinja_env = Environment(loader=FileSystemLoader(template_path),
                                      autoescape=True)
         self.url_map = Map([
-            Rule('/', endpoint='index'),
+            Rule('/', endpoint='repertoire'),
+            Rule('/setlists', endpoint='setlists'),
+            Rule('/shows', endpoint='shows'),
+            Rule('/live', endpoint='live'),
+            Rule('/settings', endpoint='settings'),
             Rule('/wireframe', endpoint='wireframe')
         ])
 
@@ -39,7 +43,7 @@ class SetlistmanagerWeb(object):
         return response(environ, start_response)
 
 
-    def on_index(self, request):
+    def on_repertoire(self, request):
         error = None
         url = ''
         if request.method == 'POST':
@@ -49,7 +53,19 @@ class SetlistmanagerWeb(object):
             else:
                 short_id = self.insert_url(url)
                 return redirect('/%s+' % short_id)
-        return self.render_template('index.html', error=error, url=url)
+        return self.render_template('repertoire.html', error=error, url=url)
+
+    def on_setlists(self, request):
+        return self.render_template('setlists.html')
+
+    def on_shows(self, request):
+        return self.render_template('shows.html')
+
+    def on_live(self, request):
+        return self.render_template('live.html')
+
+    def on_settings(self, request):
+        return self.render_template('settings.html')
 
     def on_wireframe(self, request):
         return self.render_template('wireframe.html')

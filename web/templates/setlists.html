@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block title %}Setlists{% endblock %}
+{% block filter %}
+  <div class="dropdown">
+    <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+        Band
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        <li><a class="dropdown-item" href="#">All Bands</a></li>
+        <li><a class="dropdown-item" href="#">Band 1</a></li>
+        <li><a class="dropdown-item" href="#">Band 2</a></li>
+    </ul>
+    <a class="btn ms-sm-auto flex-column" href="#" >
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="bi">
+          <use xlink:href="static/bootstrap-icons/bootstrap-icons.svg#plus"/>
+      </svg>
+    </a>
+  </div>
+{% endblock %}
+{% block body %}
+<h1>Setlists</h1>
+{% endblock %}

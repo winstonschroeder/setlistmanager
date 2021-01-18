@@ -6,6 +6,7 @@ from pygame.locals import *
 from werkzeug.serving import run_simple
 
 from web import webapp as w
+import data_access as da
 
 logging.basicConfig(filename='setlistmanager.log', level=logging.DEBUG)
 SCREEN_WIDTH = 160
@@ -31,6 +32,9 @@ class Text():
         self.fontsize = 40
         self.fontcolor = Color('black')
         self.set_font()
+        da.connect_db('db.db')
+        songs = da.get_all_songs_as_json()
+        print (songs)
 
         # self.words = [word.split(' ') for word in self.text.splitlines()]  # 2D array where each row is a list of words.
         # self.space = self.font.size(' ')[0]  # The width of a space.

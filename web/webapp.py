@@ -9,6 +9,12 @@ from werkzeug.middleware.shared_data import SharedDataMiddleware
 from werkzeug.utils import redirect
 from jinja2 import Environment, FileSystemLoader
 
+import os, sys
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+sys.path.append(parentdir)
+import data_access as d
+
 class SetlistmanagerWeb(object):
     def __init__(self, config):
         self.redis = redis.Redis(config['redis_host'], config['redis_port'])
@@ -45,7 +51,7 @@ class SetlistmanagerWeb(object):
 
     def on_repertoire(self, request):
         error = None
-        url = ''
+        songs = d.get_all_songs_as_json()
         if request.method == 'POST':
             url = request.form['url']
             if not is_valid_url(url):
@@ -53,7 +59,7 @@ class SetlistmanagerWeb(object):
             else:
                 short_id = self.insert_url(url)
                 return redirect('/%s+' % short_id)
-        return self.render_template('repertoire.html', error=error, url=url)
+        return self.render_template('repertoire.html', error=error, songs=songs)
 
     def on_setlists(self, request):
         return self.render_template('setlists.html')
@@ -62,6 +68,7 @@ class SetlistmanagerWeb(object):
         return self.render_template('shows.html')
 
     def on_live(self, request):
+
         return self.render_template('live.html')
 
     def on_settings(self, request):

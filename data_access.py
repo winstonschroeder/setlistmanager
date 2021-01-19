@@ -2,6 +2,7 @@ import sqlite3
 import json
 from sqlite3.dbapi2 import Connection
 
+
 import click
 from flask import current_app, g
 from flask.cli import with_appcontext
@@ -40,26 +41,3 @@ def init_db_command():
 def init_app(app):
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
-
-con: Connection = None
-dbname = './../setlistmanager.db'
-
-def connect_db():
-    return sqlite3.connect(dbname)
-
-def get_all_songs_as_json():
-    query = "SELECT * FROM v_songs_per_band;"
-    return query_to_json(query)
-
-def query_to_json(query):
-    con = connect_db()
-    curs = con.cursor()
-    res = curs.execute(query)
-    items = []
-    for row in res:
-        for key in curs.description:
-            items.append({key[0]: value for value in row})
-    return json.dumps(items)
-
-if __name__ == '__main__':
-    print(get_all_songs_as_json())

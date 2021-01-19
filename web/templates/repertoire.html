@@ -1,57 +1,46 @@
 {% extends "layout.html" %}
 {% block title %}Dashboard{% endblock %}
 {% block filter %}
-  <div class="dropdown">
-    <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+<div class="dropdown">
+    <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+       aria-expanded="false">
         Band
     </a>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-        <li><a class="dropdown-item" href="#">All Bands</a></li>
-        <li><a class="dropdown-item" href="#">Band 1</a></li>
-        <li><a class="dropdown-item" href="#">Band 2</a></li>
+        <li><a class="dropdown-item" href="/">All Bands</a></li>
+        {% for band in bands %}
+        <li><a class="dropdown-item" href="{{ band.id }}">{{ band.name }}</a></li>
+        {% endfor %}
     </ul>
-    <a class="btn ms-sm-auto flex-column" href="#" >
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="bi">
-          <use xlink:href="static/bootstrap-icons/bootstrap-icons.svg#plus"/>
-      </svg>
+    <a class="btn ms-sm-auto flex-column" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="bi">
+            <use xlink:href="static/bootstrap-icons/bootstrap-icons.svg#plus"/>
+        </svg>
     </a>
-  </div>
+</div>
 {% endblock %}
 {% block body %}
-  <h1>Repertoire</h1>
-<table  class="table table-dark table-striped">
-
-      <thead>
+<h1>Repertoire</h1>
+<table class="table table-dark table-striped"
+       id="table"
+       data-toggle="table"
+       data-search="true">
+    <thead>
     <tr>
-      <th scope="col">#</th>
-      <th scope="col">Song</th>
-      <th scope="col">Artist</th>
+        <th scope="col" data-field="id" data-sortable="true">#</th>
+        <th scope="col" data-field="song_name" data-sortable="true">Song</th>
+        <th scope="col" data-field="composer" data-sortable="true">Artist</th>
     </tr>
-  </thead>
-  <tbody>
-    {% for row in songs %}
+    </thead>
+    <tbody>
+    {% for song in songs %}
     <tr>
-        <th></th>
-        <td></td>
-        <td></td>
+        <td data-field="id">{{ song['id'] }}</td>
+        <td>{{ song['song_name'] }}</td>
+        <td>{{ song['composer'] }}</td>
     </tr>
     {% endfor %}
-    <tr>
-      <th scope="row">1</th>
-      <td>Happy</td>
-      <td>Pharell Williams</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>I Love Rock'n'Roll</td>
-      <td>Joan Jett</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td>Stand By Me</td>
-      <td>Ben E. King</td>
-    </tr>
-  </tbody>
+    </tbody>
 
 
 </table>

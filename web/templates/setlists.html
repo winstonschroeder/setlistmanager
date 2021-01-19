@@ -19,4 +19,7 @@
 {% endblock %}
 {% block body %}
 <h1>Setlists</h1>
+{% for setlist in setlists %}
+<p>{{ setlist.name }}</p>
+{% endfor %}
 {% endblock %}

@@ -19,7 +19,34 @@
 {% endblock %}
 {% block body %}
 <h1>Setlists</h1>
-{% for setlist in setlists %}
-<p>{{ setlist.name }}</p>
-{% endfor %}
+<table
+        data-toggle="table"
+        data-url="/setlists/json">
+    <thead>
+    <tr>
+        <th data-field="id">#</th>
+        <th data-field="band_name">Band</th>
+        <th data-field="setlist_name">Setlist</th>
+        <th data-field="set_name">Set</th>
+    </tr>
+    </thead>
+</table>
+
+
+<div class="row">
+    <div class="col ordered-first m-2">
+        <ul class="tree">
+        {% for setlist in setlists %}
+            <li class="">
+                {{ setlist.setlist_name }}
+            </li>
+        {% endfor %}
+
+        </ul>
+    </div>
+    <div class="col ordered-last m-2">
+
+    </div>
+
+</div>
 {% endblock %}

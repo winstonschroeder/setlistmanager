@@ -1,8 +1,9 @@
 {% extends "layout.html" %}
 {% block title %}Setlists{% endblock %}
 {% block filter %}
-  <div class="dropdown">
-    <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+<div class="dropdown">
+    <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+       aria-expanded="false">
         Band
     </a>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -10,43 +11,70 @@
         <li><a class="dropdown-item" href="#">Band 1</a></li>
         <li><a class="dropdown-item" href="#">Band 2</a></li>
     </ul>
-    <a class="btn ms-sm-auto flex-column" href="#" >
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="bi">
-          <use xlink:href="static/bootstrap-icons/bootstrap-icons.svg#plus"/>
-      </svg>
+    <a class="btn ms-sm-auto flex-column" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="bi">
+            <use xlink:href="static/bootstrap-icons/bootstrap-icons.svg#plus"/>
+        </svg>
     </a>
-  </div>
+</div>
 {% endblock %}
 {% block body %}
 <h1>Setlists</h1>
-<table
-        data-toggle="table"
-        data-url="/setlists/json">
-    <thead>
-    <tr>
-        <th data-field="id">#</th>
-        <th data-field="band_name">Band</th>
-        <th data-field="setlist_name">Setlist</th>
-        <th data-field="set_name">Set</th>
-    </tr>
-    </thead>
-</table>
 
 
 <div class="row">
     <div class="col ordered-first m-2">
-        <ul class="tree">
-        {% for setlist in setlists %}
-            <li class="">
-                {{ setlist.setlist_name }}
-            </li>
-        {% endfor %}
-
-        </ul>
+        <table
+                id="setliststable"
+                data-classes="table table-borderless table-hover table-sm"
+                data-toggle="table"
+                data-url="/setlists/json"
+                data-detail-view="false"
+                data-detail-view-by-click="true"
+                data-detail-formatter="detailFormatter"
+                data-detail-view-icon="false"
+                onClickRow="onSetlistSeleted">
+            <thead>
+                <tr>
+                    <th data-field="setlist_name"
+                        data-sortable="true"
+                    >Setlist
+                    </th>
+                </tr>
+            </thead>
+        </table>
     </div>
     <div class="col ordered-last m-2">
-
+        <table
+                id="setstable"
+                data-classes="table table-borderless table-hover table-sm"
+                data-toggle="settable"
+                data-detail-view="false"
+                data-detail-view-by-click="true"
+                data-detail-view-icon="false">
+            <thead>
+                <tr>
+                    <th data-field="set_name"
+                        data-sortable="true">Set
+                    </th>
+                </tr>
+            </thead>
+        </table>
     </div>
 
+    <script>
+        function detailFormatter(index, row) {
+            var html = []
+            html.push('<table data-classes="table table-borderless table-hover table-sm" data-toggle="table" data-detail-view="true" data-detail-view-by-click="true" data-detail-view-icon="true"> <thead><tr><th>Set</th></tr></thead> <tbody>')
+            $.each(row.details, function (key, value) {
+                html.push('<tr><td>'+value['set_name'] + '</td></tr>')
+            })
+            html.push('</tbody></table>')
+            $('#setstable').bootstrapTable({
+              data: row.details
+            })
+            return html.join('')
+        }
+    </script>
 </div>
 {% endblock %}

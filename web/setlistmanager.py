@@ -42,6 +42,12 @@ def setliststs():
     return render_template("setlists.html", setlists=setlists)
 
 
+@bp.route("/shows/json")
+def shows_json():
+    query = "SELECT details FROM vjson_shows;"
+    res = sqlresult_to_json(execute_query(query))
+    return res
+
 @bp.route("/shows")
 def shows():
     shows = get_shows_of_band()

@@ -19,4 +19,42 @@
 {% endblock %}
 {% block body %}
 <h1>Shows</h1>
+<div class="row">
+    <div class="col ordered-first md-auto">
+        <script src="/static/js/bootstrap-table-filter-control.min.js"></script>
+        <table
+                id="showstable"
+                data-classes="table table-borderless table-hover table-sm"
+                data-toggle="table"
+                data-url="/shows/json"
+                data-filter-control="true"
+                data-show-search-clear-button="true">
+            <thead>
+            <tr>
+                <th data-field="show_name"
+                    data-sortable="true"
+                    data-filter-control="select"
+                    class="me-auto">
+                    Show
+                </th>
+                <th data-field="date"
+                    data-sortable="true"
+                    class="me-auto">
+                    Date
+                </th>
+            </tr>
+            </thead>
+        </table>
+
+        <script>
+          $(function() {
+            $('#showstable').bootstrapTable()
+          })
+        </script>
+
+    </div>
+    <div class="col">
+
+    </div>
+</div>
 {% endblock %}

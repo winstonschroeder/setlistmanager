@@ -19,6 +19,12 @@ def index():
     return render_template("repertoire.html", songs=songs, bands=bands)
 
 
+@bp.route("/json")
+def repertoire_json():
+    query = "SELECT details FROM vjson_songs;"
+    res = sqlresult_to_json(execute_query(query))
+    return res
+
 @bp.route("/<int:band_id>", methods=("GET", "POST",))
 def repertoire_filtered(band_id):
     """Show all the songs, most recent first."""
@@ -32,17 +38,6 @@ def repertoire_filtered(band_id):
 
 @bp.route("/setlists")
 def setliststs():
-    # if request.is_json:
-    #     req = request.get_json()
-    #     print (req)
-    #
-    #     response_body = {
-    #         "message": "JSON received!",
-    #         "sender": req.get("name")
-    #     }
-    #
-    #     res = make_response(jsonify(response_body), 200)
-
     setlists = get_setlists_of_band()
     return render_template("setlists.html", setlists=setlists)
 

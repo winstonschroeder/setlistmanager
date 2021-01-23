@@ -1,56 +1,94 @@
 {% extends "layout.html" %}
 {% block title %}Dashboard{% endblock %}
-{% block filter %}
-<div class="dropdown">
-    <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
-       aria-expanded="false">
-        Band
-    </a>
-    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-        <li><a class="dropdown-item" href="/">All Bands</a></li>
-        {% for band in bands %}
-        <li><a class="dropdown-item" href="{{ band.id }}">{{ band.name }}</a></li>
-        {% endfor %}
-    </ul>
-    <a class="btn ms-sm-auto flex-column" href="#">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="bi">
-            <use xlink:href="static/bootstrap-icons/bootstrap-icons.svg#plus"/>
-        </svg>
-    </a>
-</div>
-{% endblock %}
 {% block body %}
 <h1>Repertoire</h1>
-<table class="table table-dark table-striped"
-       id="table"
-       data-toggle="table"
-       data-search="true">
-    <thead>
-    <tr>
-        <th scope="col" data-field="id" data-sortable="true">#</th>
-        <th scope="col" data-field="song_name" data-sortable="true">Song</th>
-        <th scope="col" data-field="composer" data-sortable="true">Artist</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for song in songs %}
-    <tr>
-        <td data-field="id">{{ song['id'] }}</td>
-        <td>{{ song['song_name'] }}</td>
-        <td>{{ song['composer'] }}</td>
-    </tr>
-    {% endfor %}
-    </tbody>
+<div class="row">
+    <div class="col ordered-first m-2">
+        <div id="songstoolbar" class="col-auto">
+            <div class="form-inline col-auto" role="form">
+                <div class="form-group ">
+                    <select id="bandselector" class="form-select col-auto" aria-label="bandselector">
+                        <option selected>Open this select menu</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <table
+            id="songstable"
+            data-toolbar="#songstoolbar"
+            data-classes="table table-borderless table-hover table-sm"
+            data-show-refresh="true"
+            data-toggle="table"
+            data-url="/json"
+            data-query-params="queryParams"
+            data-detail-view="true"
+            data-detail-view-by-click="true"
+            data-detail-formatter="songsDetailFormatter"
+            data-detail-view-icon="true">
+            <thead>
+            <tr>
+                <th data-field="song_name"
+                    data-sortable="true"
+                    class="me-auto">
+                    Song
+                </th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+    <div class="col ordered m-2">
 
+    </div>
+</div>
+<script>
+    function songsDetailFormatter(index, row) {
+        var html = []
+        html.push('\
+          <div class="card-body ms-5">\
+            <h5 class="card-title"><b>Artist</b> '+row['composer_name'] + '</h5>\
+            <h6 class="card-subtitle mb-2 text-muted"><b>Version</b> ' + row['version'] + '</h6>\
+          </div>')
+        return html.join('')
+      }
+</script>
+<script>
 
-</table>
-<!--
-  <form action="" method=post>
-    {% if error %}
-      <p class=error><strong>Error:</strong> {{ error }}
-    {% endif %}
-    <p>URL:
-      <input type=text name=url value="{{ url }}" class=urlinput>
-      <input type=submit value="Shorten">
-  </form>-->
+    var $table = $('#songstable')
+    $(function() {
+        $('#bandselector').click(function () {
+            $table.bootstrapTable('refresh')
+        })
+    })
+  function queryParams() {
+    var params = {}
+    $('#songstoolbar').find('input[name]').each(function () {
+      params[$(this).attr('name')] = $(this).val()
+    })
+    return params
+  }
+
+  function responseHandler(res) {
+    return res.rows
+  }
+</script>
+<script>
+    $('#songstable').bootstrapTable({
+        onLoadSuccess: function (data) {
+            var html = []
+            var bandids = []
+            html.push('<option selected value="-1">All Bands</option>')
+            data.forEach((item) => {
+                if (!bandids[item.id]) {
+                    bandids[item.id] = item.band_name
+                    html.push('<option value="' + item.band_id + '">' + item.band_name + '</option>')
+                }
+            })
+            $('#bandselector').html(html)
+        }
+    })
+
+</script>
 {% endblock %}

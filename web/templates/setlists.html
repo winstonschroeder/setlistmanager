@@ -35,12 +35,12 @@
                 data-detail-view-icon="false"
                 onClickRow="onSetlistSeleted">
             <thead>
-                <tr>
-                    <th data-field="setlist_name"
-                        data-sortable="true"
-                    >Setlist
-                    </th>
-                </tr>
+            <tr>
+                <th data-field="setlist_name"
+                    data-sortable="true"
+                >Setlist
+                </th>
+            </tr>
             </thead>
         </table>
     </div>
@@ -50,14 +50,16 @@
                 data-classes="table table-borderless table-hover table-sm"
                 data-toggle="settable"
                 data-detail-view="false"
+                data-use-row-attr-func="true"
+                data-reorderable-rows="true"
                 data-detail-view-by-click="true"
                 data-detail-view-icon="false">
             <thead>
-                <tr>
-                    <th data-field="set_name"
-                        data-sortable="true">Set
-                    </th>
-                </tr>
+            <tr>
+                <th data-field="set_name"
+                    data-sortable="true">Set
+                </th>
+            </tr>
             </thead>
         </table>
     </div>
@@ -75,6 +77,13 @@
             })
             return html.join('')
         }
+
+    </script>
+    <script>
+        $(function() {
+            $('#setliststable').bootstrapTable()
+        })
+
     </script>
 </div>
 {% endblock %}

@@ -25,6 +25,7 @@ def repertoire_json():
     res = sqlresult_to_json(execute_query(query))
     return res
 
+
 @bp.route("/<int:band_id>", methods=("GET", "POST",))
 def repertoire_filtered(band_id):
     """Show all the songs, most recent first."""
@@ -47,6 +48,7 @@ def shows_json():
     query = "SELECT details FROM vjson_shows;"
     res = sqlresult_to_json(execute_query(query))
     return res
+
 
 @bp.route("/shows")
 def shows():
@@ -84,10 +86,12 @@ def execute_query(query, **parameters):
     res = cursor.execute(query, parameters)
     return res
 
+
 def sqlresult_to_json(sqlresult):
     items = [dict(row)['details'] for row in sqlresult]
-    jsondata = json.dumps(items).replace('\\', '').replace('["', '[').replace('"]', ']').replace('}"', '}').replace('"{', '{')    
+    jsondata = json.dumps(items).replace('\\', '').replace('["', '[').replace('"]', ']').replace('}"', '}').replace('"{', '{')
     return jsondata
+
 
 def sqlresult_to_json_old(sqlresult):
     items = [dict(zip([key[0] for key in sqlresult.description], row)) for row in sqlresult]

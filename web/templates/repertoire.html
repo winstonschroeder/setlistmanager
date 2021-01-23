@@ -7,35 +7,33 @@
 <h1>Repertoire</h1>
 <div class="row">
     <div class="col ordered-first m-2">
-        <div id="songstoolbar" class="col-auto">
-            <div class="form-inline col-auto" role="form">
-                <div class="form-group ">
-                    <select id="bandselector" class="form-select col-auto" aria-label="bandselector">
-                        <option selected>Open this select menu</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
-                </div>
+        <div id="songstoolbar">
+            <div class="form-inline" role="form">
+                <button id="add" type="submit" class="btn btn-secondary">
+                    <i class="fas fa-plus"></i>
+                </button>
+                <button id="save" type="submit" class="btn btn-secondary">
+                    <i class="fas fa-save"></i>
+                </button>
             </div>
         </div>
         <table
             id="songstable"
             data-toolbar="#songstoolbar"
             data-classes="table table-borderless table-hover table-sm"
-            data-show-refresh="true"
             data-toggle="table"
-            data-show-toggle="true"
-            data-use-row-attr-func="true"
-            data-reorderable-rows="true"
+            data-show-refresh="false"
+            data-show-toggle="false"
+            data-show-columns="false"
+            data-use-row-attr-func="false"
+            data-reorderable-rows="false"
             data-url="/json"
             data-filter-control="true"
-            data-show-search-clear-button="true"
             data-query-params="queryParams"
-            data-detail-view="true"
+            data-detail-view="false"
             data-detail-view-by-click="true"
             data-detail-formatter="songsDetailFormatter"
-            data-detail-view-icon="true">
+            data-detail-view-icon="false">
             <thead>
             <tr>
                 <th data-field="band_name"
@@ -46,8 +44,15 @@
                 </th>
                 <th data-field="song_name"
                     data-sortable="true"
+                    data-filter-control="input"
                     class="me-auto">
                     Song
+                </th>
+                <th data-field="composer_name"
+                    data-sortable="true"
+                    data-filter-control="input"
+                    class="me-auto">
+                    Artist
                 </th>
             </tr>
             </thead>

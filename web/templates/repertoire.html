@@ -6,34 +6,37 @@
 <script src="static/js/bootstrap-table-reorder-rows.min.js"></script>
 <h1>Repertoire</h1>
 <div class="row">
-    <div class="col ordered-first m-2">
-        <div id="songstoolbar">
-            <div class="form-inline" role="form">
-                <button id="add" type="submit" class="btn btn-secondary">
-                    <i class="fas fa-plus"></i>
-                </button>
-                <button id="save" type="submit" class="btn btn-secondary">
-                    <i class="fas fa-save"></i>
-                </button>
-            </div>
+
+    <div id="songstoolbar" style="background-color: lightblue;">
+        <div class="form-inline" role="form">
+            <button id="add" type="submit" class="btn btn-secondary">
+                <i class="fas fa-plus"></i>
+            </button>
+            <button id="save" type="submit" class="btn btn-secondary">
+                <i class="fas fa-save"></i>
+            </button>
         </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col ordered-first m-2">
         <table
-            id="songstable"
-            data-toolbar="#songstoolbar"
-            data-classes="table table-borderless table-hover table-sm"
-            data-toggle="table"
-            data-show-refresh="false"
-            data-show-toggle="false"
-            data-show-columns="false"
-            data-use-row-attr-func="false"
-            data-reorderable-rows="false"
-            data-url="/json"
-            data-filter-control="true"
-            data-query-params="queryParams"
-            data-detail-view="false"
-            data-detail-view-by-click="true"
-            data-detail-formatter="songsDetailFormatter"
-            data-detail-view-icon="false">
+                id="songstable"
+                data-toolbar="#songstoolbar"
+                data-classes="table table-borderless table-hover table-sm"
+                data-toggle="table"
+                data-show-refresh="false"
+                data-show-toggle="false"
+                data-show-columns="false"
+                data-use-row-attr-func="false"
+                data-reorderable-rows="false"
+                data-url="/json/repertoire"
+                data-filter-control="true"
+                data-query-params="queryParams"
+                data-detail-view="false"
+                data-detail-view-by-click="true"
+                data-detail-formatter="songsDetailFormatter"
+                data-detail-view-icon="false">
             <thead>
             <tr>
                 <th data-field="band_name"
@@ -58,28 +61,98 @@
             </thead>
         </table>
     </div>
-    <div class="col ordered m-2">
+    <div class="col ordered m-2" style="background-color: lightgray;">
+        <h5>Details</h5>
+        <form>
+            <div class="mb-3">
+                <label for="songname" class="form-label">Song</label>
+                <input type="text" class="form-control" id="songname">
+            </div>
+            <div class="mb-3">
+
+                <label for="artist" class="form-label">Artist</label>
+                <div class="container">
+
+                    <select id="artist" class="form-select" data-live-search="true">
+                        <option selected>Open this select menu</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                        <option value="-1">--New--</option>
+                    </select>
+                    <i class="col ordered-col-last fa fa-plus"></i>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="version" class="form-label">Version</label>
+                <input type="text" class="form-control" id="version">
+            </div>
+            <div class="mb-3">
+                <table
+                        id="songparts"
+                        data-classes="table table-borderless table-hover table-sm"
+                        data-toggle="table">
+                    <thead>
+                    <tr>
+                        <th data-field="band_name"
+                            data-header-style="visibility:hidden;"
+                            class="me-auto">
+                            Parts
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Password</label>
+                <input type="password" class="form-control" id="exampleInputPassword1">
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                <label class="form-check-label" for="exampleCheck1">Check me out</label>
+            </div>
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Update</button>
+                <button type="submit" class="btn btn-secondary" disabled aria-label="Discard changes">Discard changes
+                </button>
+            </div>
+        </form>
+    </div>
+    <div id="results">
 
     </div>
 </div>
 <script>
+    $(document).ready(function(){
+        $.getJSON("/json/artists", function(result){
+            $("#artist").empty();
+            $("#artist").append('<option selected></option>');
+            $.each(result, function(i, artist){
+                $("#artist").append('<option value="' + artist.id + '">' + artist.name + "</option>");
+            });
+        });
+    });
+
+</script>
+<script>
   $(function() {
     $('#songstable').bootstrapTable()
   })
+
 </script>
 <script>
     function songsDetailFormatter(index, row) {
         var html = []
         html.push('\
-          <div class="card-body ms-5">\
+            <div class="card-body ms-5">\
             <h5 class="card-title"><b>Artist</b> '+row['composer_name'] + '</h5>\
             <h6 class="card-subtitle mb-2 text-muted"><b>Version</b> ' + row['version'] + '</h6>\
-          </div>')
+            </div>');
         return html.join('')
-      }
+        }
+
 </script>
 <script>
-
     var $table = $('#songstable')
     $(function() {
         $('#bandselector').click(function () {
@@ -93,10 +166,10 @@
     })
     return params
   }
-
   function responseHandler(res) {
     return res.rows
   }
+
 </script>
 <script>
     $('#songstable').bootstrapTable({

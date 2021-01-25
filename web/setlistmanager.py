@@ -19,9 +19,15 @@ def index():
     return render_template("repertoire.html", songs=songs, bands=bands)
 
 
-@bp.route("/json")
+@bp.route("/json/repertoire")
 def repertoire_json():
     query = "SELECT details FROM vjson_songs;"
+    res = sqlresult_to_json(execute_query(query))
+    return res
+
+@bp.route("/json/artists")
+def artists_json():
+    query = "SELECT artists as details FROM vjson_artists;"
     res = sqlresult_to_json(execute_query(query))
     return res
 
@@ -43,7 +49,7 @@ def setliststs():
     return render_template("setlists.html", setlists=setlists)
 
 
-@bp.route("/shows/json")
+@bp.route("/json/shows")
 def shows_json():
     query = "SELECT details FROM vjson_shows;"
     res = sqlresult_to_json(execute_query(query))
@@ -71,7 +77,7 @@ def midi():
     return render_template("midi.html")
 
 
-@bp.route("/setlists/json")
+@bp.route("/json/setlists")
 def setlists_json():
     query = "SELECT details FROM vjson_sets_per_setlist;"
     res = sqlresult_to_json(execute_query(query))

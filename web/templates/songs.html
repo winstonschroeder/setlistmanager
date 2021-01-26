@@ -7,7 +7,7 @@
 <h1>Repertoire</h1>
 <div class="row">
 
-    <div id="songstoolbar" style="background-color: lightblue;">
+    <div id="songstoolbar">
         <div class="form-inline" role="form">
             <button id="add" type="submit" class="btn btn-secondary">
                 <i class="fas fa-plus"></i>
@@ -30,7 +30,7 @@
                 data-show-columns="false"
                 data-use-row-attr-func="false"
                 data-reorderable-rows="false"
-                data-url="/json/repertoire"
+                data-url="/data/songs"
                 data-filter-control="true"
                 data-query-params="queryParams"
                 data-detail-view="false"
@@ -69,16 +69,9 @@
                 <input type="text" class="form-control" id="songname">
             </div>
             <div class="mb-3">
-
                 <label for="artist" class="form-label">Artist</label>
                 <div class="container">
-
                     <select id="artist" class="form-select" data-live-search="true">
-                        <option selected>Open this select menu</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                        <option value="-1">--New--</option>
                     </select>
                     <i class="col ordered-col-last fa fa-plus"></i>
                 </div>
@@ -118,13 +111,11 @@
             </div>
         </form>
     </div>
-    <div id="results">
-
-    </div>
 </div>
 <script>
+    // Fill song details artists drop down with data.
     $(document).ready(function(){
-        $.getJSON("/json/artists", function(result){
+        $.getJSON("/data/artists", function(result){
             $("#artist").empty();
             $("#artist").append('<option selected></option>');
             $.each(result, function(i, artist){
@@ -132,51 +123,14 @@
             });
         });
     });
-
-</script>
-<script>
-  $(function() {
-    $('#songstable').bootstrapTable()
-  })
-
-</script>
-<script>
-    function songsDetailFormatter(index, row) {
-        var html = []
-        html.push('\
-            <div class="card-body ms-5">\
-            <h5 class="card-title"><b>Artist</b> '+row['composer_name'] + '</h5>\
-            <h6 class="card-subtitle mb-2 text-muted"><b>Version</b> ' + row['version'] + '</h6>\
-            </div>');
-        return html.join('')
-        }
-
-</script>
-<script>
-    var $table = $('#songstable')
     $(function() {
-        $('#bandselector').click(function () {
-            $table.bootstrapTable('refresh')
-        })
-    })
-  function queryParams() {
-    var params = {}
-    $('#songstoolbar').find('input[name]').each(function () {
-      params[$(this).attr('name')] = $(this).val()
-    })
-    return params
-  }
-  function responseHandler(res) {
-    return res.rows
-  }
-
-</script>
-<script>
+        $('#songstable').bootstrapTable()
+    });
     $('#songstable').bootstrapTable({
         onLoadSuccess: function (data) {
             var html = []
             var bandids = []
-            html.push('<option selected value="-1">All Bands</option>')
+            html.push('<option selected value="null">All Bands</option>')
             data.forEach((item) => {
                 if (!bandids[item.id]) {
                     bandids[item.id] = item.band_name
@@ -185,7 +139,6 @@
             })
             $('#bandselector').html(html)
         }
-    })
-
+    });
 </script>
 {% endblock %}

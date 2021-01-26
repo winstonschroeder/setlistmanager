@@ -30,6 +30,17 @@ def init_db():
     with current_app.open_resource('schema.sql') as f:
         db.executescript(f.read().decode('utf8'))
 
+def execute_query_cursor(query, **parameters):
+    # TODO: fix parameter selection in execute_query.
+    db = get_db()
+    cursor = db.cursor()
+    res = cursor.execute(query, parameters)
+    return res
+
+def sqlresult_to_json(sqlresult):
+    items = [dict(row)['details'] for row in sqlresult]
+    jsondata = json.dumps(items).replace('\\', '').replace('["', '[').replace('"]', ']').replace('}"', '}').replace('"{', '{')
+    return jsondata
 
 @click.command('init-db')
 @with_appcontext

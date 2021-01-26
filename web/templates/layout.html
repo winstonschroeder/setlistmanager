@@ -12,6 +12,7 @@
 <script src="static/js/bootstrap-table.min.js" crossorigin="anonymous"></script>
 <script src="static/js/jquery.tablednd.js"></script>
 <script src="static/js/bootstrap-table-reorder-rows.js"></script>
+<script src="static/js/setlistmanager.js"></script>
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
     <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Setlist manager</a>
     <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
@@ -19,12 +20,6 @@
             aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <!-- <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search"> -->
-    <!--<ul class="navbar-nav px-3">
-        <li class="nav-item text-nowrap">
-            <a class="nav-link" href="#">Sign out</a>
-        </li>
-    </ul>-->
     <ul>
         {% if g.user %}
         <li><span>{{ g.user['username'] }}</span>
@@ -43,7 +38,7 @@
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="/">
                             <i class="fa fa-home"></i>
-                            Repertoire
+                            Songs
                         </a>
                     </li>
                     <li class="nav-item">

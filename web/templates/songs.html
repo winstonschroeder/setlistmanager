@@ -9,7 +9,9 @@
 
     <div id="songstoolbar">
         <div class="form-inline" role="form">
-            <button id="add" type="submit" class="btn btn-secondary">
+
+            <button id="add" type="submit" class="btn btn-secondary" data-bs-toggle="modal"
+                    data-bs-target="#songDetails">
                 <i class="fas fa-plus"></i>
             </button>
             <button id="save" type="submit" class="btn btn-secondary">
@@ -39,12 +41,12 @@
                 data-detail-view-icon="false">
             <thead>
             <tr>
-                <th data-field="band_name"
+                <!-- <th data-field="band_name"
                     data-sortable="true"
                     data-filter-control="select"
                     class="me-auto">
                     Band
-                </th>
+                </th>-->
                 <th data-field="song_name"
                     data-sortable="true"
                     data-filter-control="input"
@@ -61,55 +63,62 @@
             </thead>
         </table>
     </div>
-    <div class="col ordered m-2" style="background-color: lightgray;">
-        <h5>Details</h5>
-        <form>
-            <div class="mb-3">
-                <label for="songname" class="form-label">Song</label>
-                <input type="text" class="form-control" id="songname">
-            </div>
-            <div class="mb-3">
-                <label for="artist" class="form-label">Artist</label>
-                <div class="container">
-                    <select id="artist" class="form-select" data-live-search="true">
-                    </select>
-                    <i class="col ordered-col-last fa fa-plus"></i>
+
+
+    <div class="modal fade" id="songDetails">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="songDetailsModalLabel">add Song</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="songname" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="songname">
+                        </div>
+                        <div class="mb-3">
+                            <label for="artist" class="form-label">Artist</label>
+                            <div class="btn-group">
+                                <select id="artist" class="form-select" data-live-search="true">
+                                </select>
+                                <button type="button" class="btn btn-secondary">
+                                    <i class="col ordered-col-last fa fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="version" class="form-label">Version</label>
+                            <input type="text" class="form-control" id="version">
+                        </div>
+                        <div class="mb-3">
+                            <table id="songparts"
+                                   data-reorderable-rows="true"
+                            >
+                                <thead>
+                                    <tr>
+                                        <th data-field="name" >
+                                            Parts
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="mb-3">
+                            <div class="btn-group">
+                                <input type="text" class="form-control" id="newSongpart">
+                                <i id="addSongpart" class="fas fa-plus"></i>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="acceptButton" class="btn btn-primary">Save</button>
                 </div>
             </div>
-            <div class="mb-3">
-                <label for="version" class="form-label">Version</label>
-                <input type="text" class="form-control" id="version">
-            </div>
-            <div class="mb-3">
-                <table
-                        id="songparts"
-                        data-classes="table table-borderless table-hover table-sm"
-                        data-toggle="table">
-                    <thead>
-                    <tr>
-                        <th data-field="band_name"
-                            data-header-style="visibility:hidden;"
-                            class="me-auto">
-                            Parts
-                        </th>
-                    </tr>
-                    </thead>
-                </table>
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1">
-            </div>
-            <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                <label class="form-check-label" for="exampleCheck1">Check me out</label>
-            </div>
-            <div class="mb-3">
-                <button type="submit" class="btn btn-primary">Update</button>
-                <button type="submit" class="btn btn-secondary" disabled aria-label="Discard changes">Discard changes
-                </button>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 <script>
@@ -124,21 +133,57 @@
         });
     });
     $(function() {
-        $('#songstable').bootstrapTable()
+        $('#songstable').bootstrapTable();
     });
+
+
     $('#songstable').bootstrapTable({
         onLoadSuccess: function (data) {
-            var html = []
-            var bandids = []
-            html.push('<option selected value="null">All Bands</option>')
+            var html = [];
+            var bandids = [];
+            html.push('<option selected value="null">All Bands</option>');
             data.forEach((item) => {
                 if (!bandids[item.id]) {
                     bandids[item.id] = item.band_name
                     html.push('<option value="' + item.band_id + '">' + item.band_name + '</option>')
                 }
-            })
-            $('#bandselector').html(html)
+            });
+            $('#bandselector').html(html);
+        },
+        onClickRow: function (row, $element, field) {
+            //var modal = new bootstrap.Modal(document.getElementById('songDetails'));
+            var modal = new bootstrap.Modal($('#songDetails')[0]);
+            $('#songDetailsModalLabel').html('Edit');
+            $('#songname').val(row['song_name']);
+            $('#version').val(row['version']);
+            $('#acceptButton').html('Update');
+            $('#acceptButton').addClass('disabled');
+            $('#newSongpart').val('');
+            $('#artist')[0].selectedIndex = row['composer_id'];
+            var lstparts = row['songparts'];
+            var $table = $('#songparts');
+            $('#songparts').bootstrapTable('removeAll',);
+            $table.bootstrapTable({
+                data: lstparts
+            });
+
+            modal.show();
+        },
+    });
+    $('#addSongpart').click(appendSongPart);
+    $('#newSongpart').keypress(function (event) {
+        let keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == 13) {
+            $('#addSongpart').click();
         }
     });
+    function appendSongPart() {
+        var sngprtname = $('#newSongpart').val();
+        $('#songparts').bootstrapTable('append', { 'name': sngprtname });
+        $('#newSongpart').val('');
+    }
+
+
+
 </script>
 {% endblock %}
